@@ -77,3 +77,10 @@ model Message {
   senderId String @db.ObjectId
   sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
+
+model Otp {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  email  String   @unique
+  otp    String
+  sentAt DateTime @default(now())
+}
