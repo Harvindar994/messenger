@@ -46,6 +46,24 @@ const LoginForm = (props: Props) => {
         })
     }
 
+    function socialLogin(type: string){
+        setGettingLogin(true);
+
+        signIn(type, {redirect: false})
+        .then((callback)=>{
+
+            if(callback?.error){
+                toast.error("Invalid credentials");
+            }
+            else if (callback?.ok){
+                toast.success("Login successful");
+            }
+
+        }).finally(()=>{
+            setGettingLogin(false);
+        })
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="sm:glass sm:bg-base-200 sm:shadow-xl sm:border-opacity-0 px-8 py-4 sm:py-14 mt-9 overflow-hidden rounded-lg flex flex-col gap-3 w-96">
             <div className="flex flex-col gap-4">
@@ -53,15 +71,15 @@ const LoginForm = (props: Props) => {
                 <input type="password" placeholder="Password" {...register("password")} className="input input-bordered w-full max-w-xs" />
             </div>
             <div className="self-end text-xs text-neutral-content cursor-pointer" onClick={()=>{props.setActivePage('forgotPassword')}}>forgot password ?</div>
-            <button className="btn btn-primary mt-4">
+            <button type="submit" className="btn btn-primary mt-4">
                 {gettingLogin ? <span className="loading loading-spinner loading-sm"></span> : "Login"}
             </button>
             <div className="text-xs cursor-pointer text-primary text-center mt-2" onClick={()=>{props.setActivePage("signup")}}>Don't have account ? Click Here</div>
             <div className="divider">OR</div>
             <div className="flex w-full justify-center gap-3">
-                <button className="btn shadow-lg btn-square mt-4 text-lg"><FaGithub/></button>
-                <button className="btn shadow-lg btn-square mt-4 text-lg"><FcGoogle/></button>
-                <button className="btn shadow-lg btn-square mt-4 text-lg"><FaApple/></button>
+                <button type="button" className="btn shadow-lg btn-square mt-4 text-lg" onClick={()=>{socialLogin("github")}}><FaGithub/></button>
+                <button type="button" className="btn shadow-lg btn-square mt-4 text-lg" onClick={()=>{socialLogin("google")}}><FcGoogle/></button>
+                <button type="button" className="btn shadow-lg btn-square mt-4 text-lg" onClick={()=>{socialLogin("apple")}}><FaApple/></button>
             </div>
         </form>
     )
